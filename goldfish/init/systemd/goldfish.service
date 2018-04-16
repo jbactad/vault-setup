@@ -1,0 +1,17 @@
+[Unit]
+Description=Goldfish Vault UI
+Requires=vault.service
+After=vault.service
+
+[Service]
+Restart=on-failure
+PermissionsStartOnly=true
+ExecStartPre=/sbin/setcap 'cap_ipc_lock=+ep' /usr/local/bin/goldfish
+ExecStart=/usr/local/bin/goldfish -config /etc/goldfish.d/config.hcl
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGTERM
+User=goldfish
+Group=goldfish
+
+[Install]
+WantedBy=multi-user.target
